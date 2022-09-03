@@ -330,6 +330,3 @@ export const topics = [
     eCommerce: 'ecommerce',
   },
 ];
-
-
-topics.map( t => console.log(Object.keys(t)[0]))
