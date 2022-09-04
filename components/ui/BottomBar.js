@@ -51,8 +51,8 @@ export const BottomBar = ({navigation}) => {
             <Text style={styles.home}>Home</Text>
         </Pressable>
         <Text style={styles.m}></Text>
-        <Pressable style={styles.pressp} onPress={() => change('Category')}>
-            <Text style={styles.profile}>Category</Text>
+        <Pressable style={styles.pressp} onPress={() => change('Profile')}>
+            <Text style={styles.profile}>Profile</Text>
         </Pressable>
         </View>
     )

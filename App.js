@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-// import 'react-native-gesture-handler'
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Intro, Login, Signup, Home, Profile, Category} from './components';
+import {Intro, Login, Signup, Home, Profile, Category, Saved} from './components';
 import {Users} from './UserContext';
 import {navigationRef} from './navigate'
 import {Api} from './components/ui'
@@ -10,7 +9,6 @@ import {Api} from './components/ui'
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [api, setApi] = useState(' ')
   return (
     <Users>
       <NavigationContainer ref={navigationRef}>
@@ -25,6 +23,7 @@ export default function App() {
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="Category" component={Category} />
+          <Stack.Screen name="Saved" component={Saved} />
           <Stack.Screen name="Api" component={Api} options={{headerShown: !1}} />
         </Stack.Navigator>
       </NavigationContainer>

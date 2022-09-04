@@ -1,8 +1,6 @@
 import React, {useState, createContext, useContext, useEffect} from 'react'
 import {BottomBar} from './components/ui'
-// import {createNativeStackNavigator} from '@react-navigation/native-stack'
-
-// const Stack = create
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const UsersContext = createContext()
 export const useUsers = () => useContext(UsersContext)
@@ -10,6 +8,17 @@ export const useUsers = () => useContext(UsersContext)
 export const Users = ({children}) => {
     const [user, setUser] = useState({email: '', password: ''})
     
+    useEffect(() => {
+        AsyncStorage.getItem('user')
+        .then(d => {
+          if(!!d){
+            const u = JSON.parse(d)
+            setUser(u)
+          }
+        })
+        .catch(e => console.log('first', e));
+    }, [])
+
     return (
         <UsersContext.Provider value={{user, setUser}}>
         

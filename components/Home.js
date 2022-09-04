@@ -1,17 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  Button,
-  ToastAndroid,
-  Image,
-} from 'react-native';
+import {View, StyleSheet, Button, ToastAndroid} from 'react-native';
 import {Searchbar, RenderItem} from './ui';
 import {search, getSome} from '../middelware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const Home = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
@@ -28,29 +19,34 @@ export const Home = ({navigation}) => {
   };
 
   useEffect(() => {
-    const b = async() => {
-      const data = await getSome()
-      if (!data.done) {
-        ToastAndroid.show(data.msg, ToastAndroid.SHORT);
+    const ab = async () => {
+      const user = JSON.parse(await AsyncStorage.getItem('user'));
+      console.log('USER', user)
+      if (user === null) {
+        navigation.navigate('Login');
       } else {
-        const d = data.data
-        const newList = []
-        for(let i of d){
-          const {desc, img, url, title} = i
-          newList.push({
-            logo: img,
-            title,
-            description: desc,
-            url
-          })
+        const data = await getSome();
+        if (!data.done) {
+          ToastAndroid.show(data.msg, ToastAndroid.SHORT);
+        } else {
+          const d = data.data;
+          const newList = [];
+          for (let i of d) {
+            const {desc, img, url, title} = i;
+            newList.push({
+              logo: img,
+              title,
+              description: desc,
+              url,
+            });
+          }
+
+          setList(newList);
         }
-
-        setList(newList)
       }
-    }
-    b()
-  }, [])
-
+    };
+    ab();
+  }, []);
 
   useEffect(() => {
     if (btn) {
@@ -58,16 +54,14 @@ export const Home = ({navigation}) => {
     }
   }, [btn]);
 
-
-
   return (
     <View style={styles.container}>
       <Searchbar text={searchText} setText={setSearchText} onClick={setBtn} />
-      {/* <Button
+      <Button
         title="Search by Category"
         onPress={() => navigation.navigate('Category')}
-      /> */}
-      <RenderItem data={list} navigation={navigation}/>
+      />
+      <RenderItem data={list} navigation={navigation} />
     </View>
   );
 };
@@ -76,7 +70,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 5,
-
   },
   txt: {
     color: 'black',

@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import {Text, TextInput, View, Pressable, StyleSheet, ToastAndroid} from 'react-native'
 import {checkLogin} from '../dbs'
 import {useUsers} from '../UserContext'
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 export const Login = ({navigation}) => {
-    const [credentials, setCredentials] = useState({email: '', password: ''})
+  const [credentials, setCredentials] = useState({email: '', password: ''})
 
     const user = useUsers()
     const login = async () => {
@@ -16,6 +16,7 @@ export const Login = ({navigation}) => {
           result.msg, 
           ToastAndroid.SHORT)
       }else{
+        await AsyncStorage.setItem('user', JSON.stringify({...(result.data), email: credentials.email}))
         ToastAndroid.show(
           'Logged in successfully', 
           ToastAndroid.SHORT)
@@ -23,6 +24,8 @@ export const Login = ({navigation}) => {
           navigation.navigate('Home')
       }
     }
+
+
   return (
     <View style={styles.formContainer}>
 
